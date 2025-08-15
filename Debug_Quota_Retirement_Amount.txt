@@ -1,0 +1,346 @@
+//This is the debug log for a test execution of the QRA calculation. The Product Category was Credit and only one Credit Subscription was processed.
+
+How the Interview Started
+This flow was triggered as if the  quota_retirement_amount__c  record was  updated . The debug run used the " Wait " outcome.
+How the Interview Started
+This debug run was triggered as if the quota_retirement_amount__c record was updated.
+Scheduled Path: Wait
+Van Truong (0051K00000AOE81) started the flow interview.
+API Version for Running the Flow: 63
+Some of this flow's variables were set when the interview started.
+$Record = Quota_Retirement_Amount__c (a9VJx000003AsX2MAK)
+Flow start time: August 14, 2025 at 8:47 PM.
+
+
+Start Condition Requirements
+The condition requirements were skipped for this debug run.
+
+
+Decision: Is contract stamped on the QRA?
+The  default  outcome was executed.
+$$:OutcomeNotExecuted:Contract_is_missing
+Skipped this outcome because its conditions weren't met: Contract_is_missing
+Outcome conditions: 
+{!$Record.Contract__c} (800Jx000010UZz8IAG) Is null true
+All conditions must be true (AND)
+$$:DefaultOutcomeExecuted:
+Default outcome executed.
+
+
+Get Records: Get current Contract
+One or more  Contract  records were retrieved.
+Find all Contract records where:
+Id Equals {!$Record.Contract__c} (800Jx000010UZz8IAG)
+Store the values of these fields in Get_current_Contract: SBQQ__Opportunity__c, Id, ContractTerm
+Result
+Successfully found records.
+SOQL queries: 1 out of 100
+,SOQL query rows: 1 out of 50000
+
+
+Assignment: Assign vContract 2
+1 variable was updated.
+{!vCurrContract} Equals {!Get_current_Contract}
+Result
+{!vCurrContract} = "Contract (800Jx000010UZz8IAG)"
+
+
+Get Records: Get Replaced Contract
+One or more  Contract  records were retrieved.
+Find all Contract records where:
+1.  Id Equals {!vCurrContract.SBQQ__Opportunity__r.SBQQ__RenewedContract__c} (800Jx00000XcqgyIAB)
+2.  Contract_Types__c Equals LTD
+3.  SBQQ__RenewalOpportunity__c Equals {!$Record.Opportunity__c} (006Jx00000U4meJIAR)
+with advanced logic ((1 OR 3) and 2)
+Store the values of these fields in Get_Replaced_Contract: Id
+Result
+Successfully found records.
+SOQL queries: 1 out of 100
+,SOQL query rows: 1 out of 50000
+
+
+Get Records: Get Subs from Replaced Contract
+One or more  SBQQ__Subscription__c  records were retrieved.
+Find all SBQQ__Subscription__c records where:
+SBQQ__Contract__c Equals {!Get_Replaced_Contract.Id} (800Jx00000XcqgyIAB)
+Store the values of these fields in Get_Subs_from_Replaced_Contract: SBQQ__Product__c, Id
+Result
+Successfully found records.
+SOQL queries: 1 out of 100
+,SOQL query rows: 12 out of 50000
+
+
+Assignment: test
+1 variable was updated.
+{!vTest} Equals {!Get_Replaced_Contract.Id}
+Result
+{!vTest} = "800Jx00000XcqgyIAB"
+
+
+Decision: What Category?
+" Credit " outcome was executed.
+$$:OutcomeNotExecuted:SMS
+Skipped this outcome because its conditions weren't met: SMS
+Outcome conditions: 
+{!$Record.Category__c} (Credit) Equals SMS
+All conditions must be true (AND)
+$$:OutcomeNotExecuted:Email
+Skipped this outcome because its conditions weren't met: Email
+Outcome conditions: 
+{!$Record.Category__c} (Credit) Equals Email
+All conditions must be true (AND)
+$$:OutcomeNotExecuted:Pro_Serv
+Skipped this outcome because its conditions weren't met: Pro_Serv
+Outcome conditions: 
+{!$Record.Category__c} (Credit) Equals Pro-Serv
+All conditions must be true (AND)
+$$:OutcomeNotExecuted:AI_Grow
+Skipped this outcome because its conditions weren't met: AI_Grow
+Outcome conditions: 
+{!$Record.Category__c} (Credit) Equals AI Grow
+All conditions must be true (AND)
+$$:OutcomeNotExecuted:AI_Pro
+Skipped this outcome because its conditions weren't met: AI_Pro
+Outcome conditions: 
+{!$Record.Category__c} (Credit) Equals AI Pro
+All conditions must be true (AND)
+$$:OutcomeExecuted:Credit
+Outcome executed: Credit
+Outcome conditions: 
+{!$Record.Category__c} (Credit) Equals Credit
+All conditions must be true (AND)
+
+
+Get Records: Get Credit Subs on CurrContract
+One or more  SBQQ__Subscription__c  records were retrieved.
+Find all SBQQ__Subscription__c records where:
+1.  SBQQ__Contract__c Equals {!vCurrContract.Id} (800Jx000010UZz8IAG)
+2.  Product_Family__c Equals One Time Credit
+3.  Product_Family__c Equals Recurring Monthly Credit
+4.  SBQQ__Product__c Does not equal 01t1K000006k7CgQAI
+5.  SBQQ__Product__c Does not equal 01t1K000006k7CYQAY
+6.  SBQQ__Product__c Does not equal 01tJx000009FELeIAO
+7.  SBQQ__Product__c Does not equal 01tJx00000T5BN7IAN
+with advanced logic (1 AND (2 OR 3) AND 4 AND 5 AND 6 AND 7)
+Store the values of these fields in Get_Credit_Subs_on_CurrContract: Product_Family__c, Display_Net_Unit_Price__c, Billing_Start_Date__c, SBQQ__QuoteLine__c, Id, Billing_End_Date__c
+Result
+Successfully found records.
+SOQL queries: 1 out of 100
+,SOQL query rows: 1 out of 50000
+
+
+Assignment: Add Credit Subs to collection
+1 variable was updated.
+{!vValidCreditSubs} Add {!Get_Credit_Subs_on_CurrContract}
+Result
+{!vValidCreditSubs} = "[SBQQ__Subscription__c (a6SJx0000056sTBMAY)]"
+
+
+Get Records: Get One Time Credit - Incentive subs on CurrContract
+One or more  SBQQ__Subscription__c  records were retrieved.
+Find all SBQQ__Subscription__c records where:
+1.  SBQQ__Contract__c Equals {!vCurrContract.Id} (800Jx000010UZz8IAG)
+2.  SBQQ__Product__c Equals 01t1K000006k7CgQAI
+3.  SBQQ__Product__c Equals 01tJx000009FELeIAO
+with advanced logic (1 AND (2 OR 3))
+Store the values of these fields in Get_One_Time_Credit_Incentive_subs_on_CurrContract: Product_Family__c, Display_Net_Unit_Price__c, Billing_Start_Date__c, SBQQ__QuoteLine__c, Id, Billing_End_Date__c
+Result
+Successfully found records.
+SOQL queries: 1 out of 100
+,SOQL query rows: 1 out of 50000
+
+
+Loop: Loop over 1x Credit incentives
+Iteration  0  of the loop through the  Get_One_Time_Credit_Incentive_subs_on_CurrContract  collection occurred.
+$$:LoopNext:
+Loop Through: [a6SJx0000056sTDMAY]
+Iteration: 0
+Current iteration item: a6SJx0000056sTDMAY
+
+
+Decision: Is this a valid 1x Credit Incentive?
+The  default  outcome was executed.
+$$:OutcomeNotExecuted:Yes_valid_adjustment_type
+Skipped this outcome because its conditions weren't met: Yes_valid_adjustment_type
+Outcome conditions: 
+1. {!Loop_over_1x_Credit_incentives.SBQQ__QuoteLine__r.Adjustment_Request_Type__c} (Contractual Credit - LTD Message/Emails) Does not equal Contractual Credit - LTD Message/Emails
+2. {!Loop_over_1x_Credit_incentives.SBQQ__QuoteLine__r.SBQQ__Product__c} (01tJx000009FELeIAO) Equals 01t1K000006k7CgQAI
+3. {!Loop_over_1x_Credit_incentives.SBQQ__QuoteLine__r.Adjustment_Request_Type__c} (Contractual Credit - LTD Message/Emails) Does not equal Contractual Credit - LTD Message/Emails
+4. {!Loop_over_1x_Credit_incentives.SBQQ__QuoteLine__r.SBQQ__Product__c} (01tJx000009FELeIAO) Equals 01tJx000009FELeIAO
+Logic: Advanced Logic ((1 AND 2) OR (3 AND 4))
+$$:DefaultOutcomeExecuted:
+Default outcome executed.
+
+
+Loop: Loop over 1x Credit incentives
+Loop was completed.
+$$:LoopEnd:
+End Loop.
+
+
+Loop: Loop over Valid Credit Subs
+Iteration  0  of the loop through the  vValidCreditSubs  collection occurred.
+$$:LoopNext:
+Loop Through: [a6SJx0000056sTBMAY]
+Iteration: 0
+Current iteration item: a6SJx0000056sTBMAY
+
+
+Decision: From QRA Opp?
+" Yes_QRA_Opp_matches " outcome was executed.
+$$:OutcomeExecuted:Yes_QRA_Opp_matches
+Outcome executed: Yes_QRA_Opp_matches
+Outcome conditions: 
+{!Loop_over_Valid_Credit_Subs.SBQQ__QuoteLine__r.SBQQ__Quote__r.SBQQ__Opportunity2__c} (006Jx00000U4meJIAR) Equals {!$Record.Opportunity__c} (006Jx00000U4meJIAR)
+All conditions must be true (AND)
+
+
+Assignment: Add to vFinalCreditSubList
+1 variable was updated.
+{!vFinalCreditSubList} Add {!Loop_over_Valid_Credit_Subs}
+Result
+{!vFinalCreditSubList} = "[SBQQ__Subscription__c (a6SJx0000056sTBMAY)]"
+
+
+Loop: Loop over Valid Credit Subs
+Loop was completed.
+$$:LoopEnd:
+End Loop.
+
+
+Decision: Found Credit Subs?
+" Yes_Valid_Credit_Subs_found " outcome was executed.
+$$:OutcomeExecuted:Yes_Valid_Credit_Subs_found
+Outcome executed: Yes_Valid_Credit_Subs_found
+Outcome conditions: 
+{!vFinalCreditSubList} ([SBQQ__Subscription__c (a6SJx0000056sTBMAY)]) Is Empty false
+All conditions must be true (AND)
+
+
+Loop: Loop over vFinalCreditSubList
+Iteration  0  of the loop through the  vFinalCreditSubList  collection occurred.
+$$:LoopNext:
+Loop Through: [a6SJx0000056sTBMAY]
+Iteration: 0
+Current iteration item: a6SJx0000056sTBMAY
+
+
+Decision: Credit: One Time vs Recurring
+" One_Time " outcome was executed.
+$$:OutcomeExecuted:One_Time
+Outcome executed: One_Time
+Outcome conditions: 
+{!Loop_over_vFinalCreditSubList.Product_Family__c} (One Time Credit) Equals One Time Credit
+All conditions must be true (AND)
+
+
+Assignment: Credit: Add to vTotalOneTime
+1 variable was updated.
+{!vTotalOneTime} Add {!Loop_over_vFinalCreditSubList.Display_Net_Unit_Price__c}
+Result
+{!vTotalOneTime} = "($8,400)"
+
+
+Assignment: Credit: Add recordid to vInputRecord
+1 variable was updated.
+{!vInputRecord} Add a6SJx0000056sTBMAY, 
+Result
+{!vInputRecord} = "a6SJx0000056sTBMAY, "
+
+
+Loop: Loop over vFinalCreditSubList
+Loop was completed.
+$$:LoopEnd:
+End Loop.
+
+
+Assignment: Credit QRA Audit
+3 variables were updated.
+{!vTestTotalOneTime} Equals {!vTotalOneTime}
+{!vTestTotalRecurring} Equals {!vTotalRecurringCreditAmount}
+{!vTestContractNumber} Equals {!vCurrContract.ContractTerm}
+Result
+{!vTestTotalRecurring} = "0"
+{!vTestContractNumber} = "24"
+{!vTestTotalOneTime} = "($8,400)"
+
+
+Assignment: Stamp Annualized Credit
+1 variable was updated.
+{!vQRA} Equals {!fAnnualizedCredit}
+Result
+{!vQRA} = "($4,200)"
+
+
+Decision: Copy 3 of Opp Excluded?
+The  default  outcome was executed.
+$$:OutcomeNotExecuted:Copy_3_of_Yes
+Skipped this outcome because its conditions weren't met: Copy_3_of_Yes
+Outcome conditions: 
+{!$Record.Opportunity__r.Quota_Retirement_Adjustment__c} (false) Equals true
+All conditions must be true (AND)
+$$:DefaultOutcomeExecuted:
+Default outcome executed.
+
+
+Update Records: Stamp Credit QRA onto Opp
+One or more  Opportunity  records are ready to be updated.
+Find all Opportunity records.
+Update the records’ field values.
+Clari_Forecast_Category__c = Closed
+First_Year_Credit_Amount__c = {!vQRA} (($4,200))
+Result
+All records that meet the filter criteria are ready to be updated when the next screen, pause, or local action is executed or when the interview finishes.
+SOQL queries: 2 out of 100
+,SOQL query rows: 2 out of 50000
+,DML statements: 2 out of 150
+,DML rows: 2 out of 10000
+
+
+Update Records: Update QRA - Qualified
+One or more  Quota_Retirement_Amount__c  records are ready to be updated.
+Update the Quota_Retirement_Amount__c record that triggered the flow: 
+Conditions to update the record
+None—Always Update Record
+Update the record's fields
+Contract__c = {!vCurrContract.Id} (800Jx000010UZz8IAG)
+Current_Email_ACS__c = {!vCurrEmailACS} (null)
+Input_records__c = {!vInputRecord} (a6SJx0000056sTBMAY, )
+Last_Calculated_Date__c = {!$Flow.CurrentDateTime} (8/14/2025 11:47 PM)
+Previous_Email_ACS__c = {!vPrevEmailACS} (null)
+Qualified__c = true
+Queued__c = false
+Quota_Retirement_Amount__c = {!vQRA} (($4,200))
+Unqualified_Reason__c = 
+Triggering Quota_Retirement_Amount__c Record Values
+{
+  "LastModifiedDate": "2025-08-13T00:44:05.000Z",
+  "IsDeleted": false,
+  "Qualified__c": true,
+  "Contract__c": "800Jx000010UZz8IAG",
+  "Opportunity__c": "006Jx00000U4meJIAR",
+  "Unqualified_Reason__c": "",
+  "Name": "QRA-73991",
+  "Last_Calculated_Date__c": "2025-08-15T03:47:16Z",
+  "SystemModstamp": "2025-08-13T00:44:05.000Z",
+  "Quota_Retirement_Amount__c": -4200,
+  "CreatedById": "0051K00000AN2zEQAT",
+  "Input_records__c": "a6SJx0000056sTBMAY, ",
+  "Category__c": "Credit",
+  "CreatedDate": "2025-08-13T00:20:01.000Z",
+  "Queued__c": false,
+  "Id": "a9VJx000003AsX2MAK",
+  "LastModifiedById": "0051K00000AN2zEQAT"
+}
+Result
+The Quota_Retirement_Amount__c record is ready to be updated when the interview finishes.
+DML statements: 1 out of 150
+,DML rows: 1 out of 10000
+
+
+Rollback
+Because the flow ran in rollback mode, any changes to add, delete, or modify records were rolled back.
+
+
+How the Interview Finished
+The flow interview ran for 3.18 seconds and finished on August 14, 2025 at 8:47 PM.
